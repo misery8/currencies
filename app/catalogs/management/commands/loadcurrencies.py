@@ -2,7 +2,7 @@ import logging
 
 from django.core.management.base import BaseCommand
 
-from catalogs.tasks import load_currencies
+from app.catalogs.tasks import load_currencies
 
 logger = logging.getLogger(__name__)
 

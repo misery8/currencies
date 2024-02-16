@@ -9,8 +9,6 @@ services:
     volumes:
       - .:/currencies
       - ./db.sqlite3:/currencies/db.sqlite3
-    ports:
-      - "8000:8000"
     env_file:
       - .env
     environment:
