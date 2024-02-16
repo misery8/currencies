@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/currencies
+      - ./db.sqlite3:/currencies/db.sqlite3
     ports:
       - "8000:8000"
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
@@ -18,9 +19,9 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings
   db:
-    image: "sqlite:latest"
+    image: "sqlite:3.36.0"
     volumes:
-      - ./db.sqlite3:/db.sqlite3
+      - ./db.sqlite3:/currencies/db.sqlite3
     restart: always
   celery:
     container_name: celery
@@ -29,7 +30,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/currencies
-      - ./db.sqlite3:/db.sqlite3
+      - ./db.sqlite3:/currencies/db.sqlite3
     depends_on:
       - db
     env_file:
