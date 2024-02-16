@@ -13,6 +13,4 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . .
 
-RUN mkdir -p /currencies/static
-
 ENTRYPOINT ["sh", "./docker-entrypoint.sh"]

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Create a static folder"
+mkdir -p static
+
 echo "Collect static files"
 python manage.py collectstatic --noinput
 
