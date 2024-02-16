@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  web:
+    container_name: currencies
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/currencies
+    ports:
+      - "8000:8000"
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings
+  db:
+    image: "sqlite:latest"
+    volumes:
+      - ./db.sqlite3:/currencies/db.sqlite3
+    restart: always
+  celery:
+    container_name: celery
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/currencies
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings
+    command: celery -A currencies worker --beat --scheduler django --loglevel=INFO
