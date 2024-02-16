@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # External Packages
     'django_celery_beat',
-    'rest_framework',
     # Internal Apps
     'catalogs',
 ]
