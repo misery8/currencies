@@ -5,8 +5,6 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /currencies
 
-RUN mkdir -p /currencies/static
-
 COPY requirements.txt ./
 
 COPY docker-entrypoint.sh ./
@@ -14,5 +12,7 @@ COPY docker-entrypoint.sh ./
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . .
+
+RUN mkdir -p /currencies/static
 
 ENTRYPOINT ["sh", "./docker-entrypoint.sh"]
