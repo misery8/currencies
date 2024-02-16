@@ -20,7 +20,7 @@ services:
   db:
     image: "sqlite:latest"
     volumes:
-      - ./db.sqlite3:/currencies/db.sqlite3
+      - ./db.sqlite3:/db.sqlite3
     restart: always
   celery:
     container_name: celery
@@ -29,6 +29,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/currencies
+      - ./db.sqlite3:/db.sqlite3
     depends_on:
       - db
     env_file:
