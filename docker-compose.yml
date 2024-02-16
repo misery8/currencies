@@ -27,3 +27,13 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings
     command: celery -A currencies worker --beat --scheduler django --loglevel=INFO
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    ports:
+      - "5085:5085"
+    volumes:
+      - ./nginx/appseed-app.conf:/etc/nginx/conf.d/appseed-app.conf:ro
+    depends_on:
+      - web
