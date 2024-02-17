@@ -16,5 +16,6 @@ class Command(BaseCommand):
             load_currencies.delay()
         except Exception as e:
             logger.exception(e)
+            self.stdout.write(self.style.ERROR('Error loading currencies'))
         else:
             self.stdout.write(self.style.SUCCESS('Successfully initiated currency data loading'))
