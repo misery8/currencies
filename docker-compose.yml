@@ -8,30 +8,42 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/currencies
-      - ./db.sqlite3:/currencies/db.sqlite3
+      - ./app/db.sqlite3:/currencies/app/db.sqlite3
     env_file:
       - .env
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings
   celery:
-    container_name: celery
     build:
       context: .
       dockerfile: Dockerfile
+    command: celery -A currencies worker -l info
     volumes:
       - .:/currencies
     env_file:
       - .env
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings
-    command: celery -A currencies worker --beat --scheduler django --loglevel=INFO
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A core beat -l info
+    volumes:
+      - .:/currencies
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings
 
   nginx:
     container_name: nginx
     image: nginx:latest
     ports:
-      - "5085:5085"
+      - "80:5000"
     volumes:
       - ./nginx/appseed-app.conf:/etc/nginx/conf.d/appseed-app.conf:ro
+      - .:/currencies
     depends_on:
       - web

@@ -9,28 +9,32 @@
 
 ## Установка
 1. Клонируйте репозиторий:
-   ```bash
+   ```shell
    git clone <url>
    ```
 
 2. Перейдите в каталог проекта:
-    ```bash
+    ```shell
     cd currencies
     ```
 
 3. Создайте файл .env, скопировав .env.example, и заполните все необходимые данные:
-    ```bash
+    ```shell
     cp .env.example .env
     ```
 
 ## Сборка и запуск
 1. Соберите и запустите контейнеры Docker:
-    ```bash
+    ```shell
     docker-compose up --build
     ```
-2. Для запуска загрузки данных о курсах валют через Docker выполните следующую команду:
-   ```bash
-   docker-compose run web python manage.py loadcurrencies
+2. Создайте пользователя для входа в админ-панель:
+   ```shell
+   docker-compose web python app/manage.py createsuperuser
+   ```
+3. Для запуска загрузки данных о курсах валют через Docker выполните следующую команду:
+   ```shell
+   docker-compose web python app/manage.py loadcurrencies
    ```
 ## Использование
 - Перейдите по адресу http://localhost:8000/admin/ и добавьте необходимые данные о курсах валют через админ-панель.
