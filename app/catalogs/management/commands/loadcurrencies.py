@@ -13,7 +13,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         try:
-            load_currencies.delay()
+            load_currencies()
         except Exception as e:
             logger.exception(e)
             self.stdout.write(self.style.ERROR('Error loading currencies'))

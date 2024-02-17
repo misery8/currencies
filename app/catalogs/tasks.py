@@ -1,5 +1,7 @@
 import logging
+from dateutil.parser import isoparse
 
+from django.db import transaction
 import requests
 from requests.exceptions import (
     Timeout,
@@ -12,6 +14,7 @@ from .models import Currency
 logger = logging.getLogger(__name__)
 
 
+@transaction.atomic
 @shared_task
 def load_currencies():
     url = 'https://www.cbr-xml-daily.ru/daily_json.js'
@@ -27,15 +30,16 @@ def load_currencies():
         logger.error(f'Unexpected error occurred: {e}')
     else:
         data = response.json()
+        date = isoparse(data['Date']).strftime('%Y-%m-%d')
 
         for charcode, info in data['Valute'].items():
             try:
                 currency, exist = Currency.objects.get_or_create(
                     charcode=charcode,
-                    date=data['Date'],
+                    date=date,
                     defaults={
                         'charcode': charcode,
-                        'date': data['Date'],
+                        'date': date,
                         'rate': info['Value']
                     })
                 currency.save()
